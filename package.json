@@ -1,11 +1,11 @@
 {
   "name": "virtual-world",
-  "private":true,
+  "private": true,
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "cd apps/web-app-vanilla && pnpm run dev"
   },
   "keywords": [],
   "author": "lordsayur",
