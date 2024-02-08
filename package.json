@@ -5,7 +5,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "cd apps/web-app-vanilla && pnpm run dev"
+    "dev": "cd apps/web-app-vanilla && pnpm run dev",
+    "test": "pnpm run -r test"
   },
   "keywords": [],
   "author": "lordsayur",
