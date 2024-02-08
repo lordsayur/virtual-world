@@ -13,4 +13,22 @@ export class Graph {
       point.draw(ctx);
     }
   }
+
+  tryAddPoint(newPoint: Point): boolean {
+    if (this.containsPoint(newPoint)) {
+      return false;
+    }
+
+    this.addPoint(newPoint);
+
+    return true;
+  }
+
+  addPoint(newPoint: Point) {
+    this.points.push(newPoint);
+  }
+
+  containsPoint(point: Point) {
+    return this.points.some((p) => p.equals(point));
+  }
 }

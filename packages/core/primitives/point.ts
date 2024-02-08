@@ -7,6 +7,10 @@ export class Point {
     this.y = y;
   }
 
+  equals(point: Point) {
+    return this.x == point.x && this.y == point.y
+  }
+
   draw(
     ctx: CanvasRenderingContext2D,
     size: number = 18,

@@ -19,3 +19,23 @@ function createCanvasContext(): CanvasRenderingContext2D {
 
   return canvas.getContext("2d")!;
 }
+
+const addRandomPointButton = document.getElementById(
+  "add-random-point-btn"
+) as HTMLButtonElement;
+addRandomPointButton.addEventListener("click", addRandomPoint);
+
+function addRandomPoint() {
+  const canvas = document.getElementById("virtual-world") as HTMLCanvasElement;
+
+  const isAdded = graph.tryAddPoint(
+    new Point(Math.random() * canvas.width, Math.random() * canvas.height)
+  );
+
+  if (!isAdded) {
+    return;
+  }
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  graph.draw(ctx);
+}
