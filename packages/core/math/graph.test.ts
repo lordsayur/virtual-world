@@ -1,7 +1,6 @@
-// sum.test.js
 import { expect, describe, test } from "vitest";
 import { Graph } from "./graph";
-import { Point } from "../primitives";
+import { Point, Segment } from "../primitives";
 
 describe("Graph", () => {
   describe("TryAddPoint", () => {
@@ -15,6 +14,7 @@ describe("Graph", () => {
 
       // assert
       expect(result).toBeTruthy();
+      expect(graph.points).toHaveLength(1);
     });
 
     test("Should not add point Given has equal point", () => {
@@ -27,6 +27,54 @@ describe("Graph", () => {
 
       // assert
       expect(result).toBeFalsy();
+      expect(graph.points).toHaveLength(1);
+    });
+  });
+  describe("TryAddSegment", () => {
+    test("Should add segment Given no equal segment And not between same points", () => {
+      // arrange
+      const point1 = new Point(1, 1);
+      const point2 = new Point(1, 2);
+      const graph = new Graph([point1, point2], []);
+      const newSegment = new Segment(point1, point2);
+
+      // act
+      const result = graph.tryAddSegment(newSegment);
+
+      // assert
+      expect(result).toBeTruthy();
+      expect(graph.segments).toHaveLength(1);
+    });
+
+    test("Should not add segment Given between same points", () => {
+      // arrange
+      const point1 = new Point(1, 1);
+      const point2 = new Point(1, 2);
+      const graph = new Graph([point1, point2], []);
+      const newSegment = new Segment(point1, point1);
+
+      // act
+      const result = graph.tryAddSegment(newSegment);
+
+      // assert
+      expect(result).toBeFalsy();
+      expect(graph.segments).toHaveLength(0);
+    });
+
+    test("Should not add segment Given has equal segment", () => {
+      // arrange
+      const point1 = new Point(1, 1);
+      const point2 = new Point(1, 2);
+      const segment = new Segment(point2, point1);
+      const graph = new Graph([point1, point2], [segment]);
+      const newSegment = new Segment(point1, point2);
+
+      // act
+      const result = graph.tryAddSegment(newSegment);
+
+      // assert
+      expect(result).toBeFalsy();
+      expect(graph.segments).toHaveLength(1);
     });
   });
 });

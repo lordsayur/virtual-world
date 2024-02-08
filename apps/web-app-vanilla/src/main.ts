@@ -39,3 +39,26 @@ function addRandomPoint() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   graph.draw(ctx);
 }
+
+const addRandomSegmentButton = document.getElementById(
+  "add-random-segment-btn"
+) as HTMLButtonElement;
+addRandomSegmentButton.addEventListener("click", addRandomSegment);
+
+function addRandomSegment() {
+  const point1Index = Math.floor(Math.random() * graph.points.length);
+  const point2Index = Math.floor(Math.random() * graph.points.length);
+
+  const segmentAdded = graph.tryAddSegment(
+    new Segment(graph.points[point1Index], graph.points[point2Index])
+  );
+
+  if (!segmentAdded) {
+    return;
+  }
+
+  const canvas = document.getElementById("virtual-world") as HTMLCanvasElement;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  graph.draw(ctx);
+}
