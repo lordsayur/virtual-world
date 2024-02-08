@@ -19,15 +19,17 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
-  text-align: center;
 }
 
 #virtual-world{
   margin: 2rem;
+  height: 40rem;
+  width: 40rem;
   background: darkgreen;
 }
