@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "command": "pnpm run dev",
+      "icon": { "id": "run", "color": "terminal.ansiGreen" },
+      "label": "pnpm: run dev",
+      "detail": "dev - apps/web-app-vanilla"
+    },
+    {
+      "type": "shell",
+      "command": "pnpm run test",
+      "icon": { "id": "rocket", "color": "terminal.ansiCyan" },
+      "label": "pnpm: run test",
+      "detail": "run test for all projects"
+    }
+  ]
+}
