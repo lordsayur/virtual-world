@@ -82,3 +82,23 @@ function removeRandomSegment() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   graph.draw(ctx);
 }
+
+const removeRandomPointButton = document.getElementById(
+  "remove-random-point-btn"
+);
+removeRandomPointButton?.addEventListener("click", removeRandomPoint);
+
+function removeRandomPoint() {
+  if (graph.points.length == 0) {
+    alert("No points");
+    return;
+  }
+
+  const pointIndex = Math.floor(Math.random() * graph.points.length);
+  graph.removePoint(graph.points[pointIndex]);
+
+  const canvas = document.getElementById("virtual-world") as HTMLCanvasElement;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  graph.draw(ctx);
+}

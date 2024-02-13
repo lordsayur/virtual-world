@@ -59,4 +59,17 @@ export class Graph {
   removeSegment(segment: Segment) {
     this.segments.splice(this.segments.indexOf(segment), 1);
   }
+
+  getSegmentsWithPoint(point: Point): Segment[] {
+    return this.segments.filter((s) => s.includes(point));
+  }
+
+  removePoint(point: Point) {
+    const segments = this.getSegmentsWithPoint(point);
+    segments.forEach((segment: Segment) => {
+      this.removeSegment(segment);
+    });
+
+    this.points.splice(this.points.indexOf(point), 1);
+  }
 }

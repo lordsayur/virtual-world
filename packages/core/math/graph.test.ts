@@ -92,4 +92,20 @@ describe("Graph", () => {
       expect(graph.segments).toHaveLength(0);
     });
   });
+  describe("removePoint", () => {
+    test("should remove point and associated segments", () => {
+      // arrange
+      const point1 = new Point(1, 1);
+      const point2 = new Point(1, 2);
+      const segment = new Segment(point1, point2);
+      const graph = new Graph([point1, point2], [segment]);
+
+      // act
+      graph.removePoint(point2);
+
+      // assert
+      expect(graph.points).toHaveLength(1);
+      expect(graph.segments).toHaveLength(0);
+    });
+  });
 });
