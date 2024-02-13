@@ -72,4 +72,9 @@ export class Graph {
 
     this.points.splice(this.points.indexOf(point), 1);
   }
+
+  dispose() {
+    this.points = []
+    this.segments = []
+  }
 }

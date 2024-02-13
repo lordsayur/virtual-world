@@ -102,3 +102,15 @@ function removeRandomPoint() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   graph.draw(ctx);
 }
+
+const clearGraphButton = document.getElementById("clear-graph-btn");
+clearGraphButton?.addEventListener("click", clearGraph);
+
+function clearGraph() {
+  graph.dispose();
+
+  const canvas = document.getElementById("virtual-world") as HTMLCanvasElement;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  graph.draw(ctx);
+}
