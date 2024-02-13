@@ -62,3 +62,23 @@ function addRandomSegment() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   graph.draw(ctx);
 }
+
+const removeRandomSegmentButton = document.getElementById(
+  "remove-random-segment-btn"
+);
+removeRandomSegmentButton?.addEventListener("click", removeRandomSegment);
+
+function removeRandomSegment() {
+  if (graph.segments.length == 0) {
+    alert("No segments");
+    return;
+  }
+
+  const segmentIndex = Math.floor(Math.random() * graph.segments.length);
+  graph.removeSegment(graph.segments[segmentIndex]);
+
+  const canvas = document.getElementById("virtual-world") as HTMLCanvasElement;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  graph.draw(ctx);
+}

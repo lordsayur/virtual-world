@@ -77,4 +77,19 @@ describe("Graph", () => {
       expect(graph.segments).toHaveLength(1);
     });
   });
+  describe("removeSegment", () => {
+    test("should remove segment", () => {
+      // arrange
+      const point1 = new Point(1, 1);
+      const point2 = new Point(1, 2);
+      const segment = new Segment(point1, point2);
+      const graph = new Graph([point1, point2], [segment]);
+
+      // act
+      graph.removeSegment(graph.segments[0]);
+
+      //
+      expect(graph.segments).toHaveLength(0);
+    });
+  });
 });

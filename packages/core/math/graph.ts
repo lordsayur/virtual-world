@@ -55,4 +55,8 @@ export class Graph {
   containsSegment(segment: Segment) {
     return this.segments.some((s) => s.equals(segment));
   }
+
+  removeSegment(segment: Segment) {
+    this.segments.splice(this.segments.indexOf(segment), 1);
+  }
 }
