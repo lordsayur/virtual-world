@@ -1,8 +1,9 @@
 import { Graph, Point, Segment } from "@virtual-world/core";
+import { Canvas } from "./canvas";
 
 import "./style.css";
 
-const ctx = createCanvasContext();
+const canvas = Canvas.create("virtual-world", 600, 600);
 
 const point1 = new Point(50, 50);
 const point2 = new Point(350, 150);
@@ -10,15 +11,7 @@ const point2 = new Point(350, 150);
 const segment1 = new Segment(point1, point2);
 
 const graph = new Graph([point1, point2], [segment1]);
-graph.draw(ctx);
-
-function createCanvasContext(): CanvasRenderingContext2D {
-  const canvas = document.getElementById("virtual-world") as HTMLCanvasElement;
-  canvas.width = 600;
-  canvas.height = 600;
-
-  return canvas.getContext("2d")!;
-}
+graph.draw(canvas.context);
 
 const addRandomPointButton = document.getElementById(
   "add-random-point-btn"
@@ -26,18 +19,19 @@ const addRandomPointButton = document.getElementById(
 addRandomPointButton.addEventListener("click", addRandomPoint);
 
 function addRandomPoint() {
-  const canvas = document.getElementById("virtual-world") as HTMLCanvasElement;
-
   const isAdded = graph.tryAddPoint(
-    new Point(Math.random() * canvas.width, Math.random() * canvas.height)
+    new Point(
+      Math.random() * canvas.instance.width,
+      Math.random() * canvas.instance.height
+    )
   );
 
   if (!isAdded) {
     return;
   }
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  graph.draw(ctx);
+  canvas.clear();
+  graph.draw(canvas.context);
 }
 
 const addRandomSegmentButton = document.getElementById(
@@ -57,10 +51,8 @@ function addRandomSegment() {
     return;
   }
 
-  const canvas = document.getElementById("virtual-world") as HTMLCanvasElement;
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  graph.draw(ctx);
+  canvas.clear();
+  graph.draw(canvas.context);
 }
 
 const removeRandomSegmentButton = document.getElementById(
@@ -77,10 +69,8 @@ function removeRandomSegment() {
   const segmentIndex = Math.floor(Math.random() * graph.segments.length);
   graph.removeSegment(graph.segments[segmentIndex]);
 
-  const canvas = document.getElementById("virtual-world") as HTMLCanvasElement;
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  graph.draw(ctx);
+  canvas.clear();
+  graph.draw(canvas.context);
 }
 
 const removeRandomPointButton = document.getElementById(
@@ -97,10 +87,8 @@ function removeRandomPoint() {
   const pointIndex = Math.floor(Math.random() * graph.points.length);
   graph.removePoint(graph.points[pointIndex]);
 
-  const canvas = document.getElementById("virtual-world") as HTMLCanvasElement;
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  graph.draw(ctx);
+  canvas.clear();
+  graph.draw(canvas.context);
 }
 
 const clearGraphButton = document.getElementById("clear-graph-btn");
@@ -109,8 +97,6 @@ clearGraphButton?.addEventListener("click", clearGraph);
 function clearGraph() {
   graph.dispose();
 
-  const canvas = document.getElementById("virtual-world") as HTMLCanvasElement;
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  graph.draw(ctx);
+  canvas.clear();
+  graph.draw(canvas.context);
 }
