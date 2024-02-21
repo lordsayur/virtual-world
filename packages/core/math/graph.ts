@@ -8,7 +8,7 @@ export class Graph {
 
   canvas: ICanvas;
 
-  constructor(points: Point[], segments: Segment[], canvas: ICanvas) {
+  constructor(canvas: ICanvas, points: Point[] = [], segments: Segment[] = []) {
     this.points = points;
     this.segments = segments;
     this.canvas = canvas;
@@ -37,6 +37,7 @@ export class Graph {
 
   addPoint(newPoint: Point) {
     this.points.push(newPoint);
+    return this;
   }
 
   containsPoint(point: Point) {
@@ -55,6 +56,7 @@ export class Graph {
 
   addSegment(newSegment: Segment) {
     this.segments.push(newSegment);
+    return this;
   }
 
   containsSegment(segment: Segment) {

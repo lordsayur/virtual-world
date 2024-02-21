@@ -1,6 +1,8 @@
 import { Position } from "..";
 
 export interface ICanvas {
+  width: number;
+  height: number;
   clear(): void;
   drawPoint(position: Position, options?: DrawPointOption): void;
   drawSegment(

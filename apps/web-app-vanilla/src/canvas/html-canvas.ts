@@ -21,6 +21,14 @@ export class HtmlCanvas implements ICanvas {
     this.context = ctx;
   }
 
+  get height() {
+    return this.instance.height;
+  }
+
+  get width() {
+    return this.instance.width;
+  }
+
   clear() {
     this.context.clearRect(0, 0, this.instance.width, this.instance.height);
   }
