@@ -1,3 +1,4 @@
+import { ICanvas } from "..";
 import { Point } from "../primitives/point";
 import { Segment } from "../primitives/segment";
 
@@ -5,18 +6,22 @@ export class Graph {
   points: Point[];
   segments: Segment[];
 
-  constructor(points: Point[], segments: Segment[]) {
+  canvas: ICanvas;
+
+  constructor(points: Point[], segments: Segment[], canvas: ICanvas) {
     this.points = points;
     this.segments = segments;
+    this.canvas = canvas;
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
+  draw() {
+    this.canvas.clear();
     for (const segment of this.segments) {
-      segment.draw(ctx);
+      segment.draw(this.canvas);
     }
 
     for (const point of this.points) {
-      point.draw(ctx);
+      point.draw(this.canvas);
     }
   }
 
@@ -74,7 +79,7 @@ export class Graph {
   }
 
   dispose() {
-    this.points = []
-    this.segments = []
+    this.points = [];
+    this.segments = [];
   }
 }

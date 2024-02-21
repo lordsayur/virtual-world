@@ -1,17 +1,17 @@
 import { Graph, Point, Segment } from "@virtual-world/core";
-import { Canvas } from "./canvas";
+import { HtmlCanvas } from "./canvas/html-canvas";
 
 import "./style.css";
 
-const canvas = Canvas.create("virtual-world", 600, 600);
+const canvas = HtmlCanvas.create("virtual-world", 600, 600);
 
 const point1 = new Point(50, 50);
 const point2 = new Point(350, 150);
 
 const segment1 = new Segment(point1, point2);
 
-const graph = new Graph([point1, point2], [segment1]);
-graph.draw(canvas.context);
+const graph = new Graph([point1, point2], [segment1], canvas);
+graph.draw();
 
 const addRandomPointButton = document.getElementById(
   "add-random-point-btn"
@@ -30,8 +30,7 @@ function addRandomPoint() {
     return;
   }
 
-  canvas.clear();
-  graph.draw(canvas.context);
+  graph.draw();
 }
 
 const addRandomSegmentButton = document.getElementById(
@@ -51,8 +50,7 @@ function addRandomSegment() {
     return;
   }
 
-  canvas.clear();
-  graph.draw(canvas.context);
+  graph.draw();
 }
 
 const removeRandomSegmentButton = document.getElementById(
@@ -69,8 +67,7 @@ function removeRandomSegment() {
   const segmentIndex = Math.floor(Math.random() * graph.segments.length);
   graph.removeSegment(graph.segments[segmentIndex]);
 
-  canvas.clear();
-  graph.draw(canvas.context);
+  graph.draw();
 }
 
 const removeRandomPointButton = document.getElementById(
@@ -87,8 +84,7 @@ function removeRandomPoint() {
   const pointIndex = Math.floor(Math.random() * graph.points.length);
   graph.removePoint(graph.points[pointIndex]);
 
-  canvas.clear();
-  graph.draw(canvas.context);
+  graph.draw();
 }
 
 const clearGraphButton = document.getElementById("clear-graph-btn");
@@ -97,6 +93,5 @@ clearGraphButton?.addEventListener("click", clearGraph);
 function clearGraph() {
   graph.dispose();
 
-  canvas.clear();
-  graph.draw(canvas.context);
+  graph.draw();
 }

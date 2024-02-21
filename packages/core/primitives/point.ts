@@ -1,25 +1,22 @@
-export class Point {
-  x: number;
-  y: number;
+import { ICanvas, Position } from "..";
 
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
+export class Point {
+  constructor(
+    private x: number,
+    private y: number,
+    private size: number = 18,
+    private color: string = "black"
+  ) {}
+
+  get position(): Position {
+    return { x: this.x, y: this.y };
   }
 
   equals(point: Point) {
-    return this.x == point.x && this.y == point.y
+    return this.x == point.x && this.y == point.y;
   }
 
-  draw(
-    ctx: CanvasRenderingContext2D,
-    size: number = 18,
-    color: string = "black"
-  ) {
-    const rad = size / 2;
-    ctx.beginPath();
-    ctx.fillStyle = color;
-    ctx.arc(this.x, this.y, rad, 0, Math.PI * 2);
-    ctx.fill();
+  draw(ctx: ICanvas) {
+    ctx.drawPoint(this.position, { size: this.size, color: this.color });
   }
 }
