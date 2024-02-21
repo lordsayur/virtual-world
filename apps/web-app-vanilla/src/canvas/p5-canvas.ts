@@ -1,67 +1,97 @@
 import {
   DrawPointOption,
   DrawSegmentOption,
+  Graph,
   ICanvas,
+  Point,
   Position,
+  RgbColor,
+  Segment,
 } from "@virtual-world/core";
 import p5 from "p5";
 
 export class P5Canvas implements ICanvas {
-  instance: p5;
+  width: number;
+  height: number;
 
-  constructor(instance: p5) {
-    this.instance = instance;
-  }
-
-  get width(): number {
-    return this.instance.width;
-  }
-
-  get height(): number {
-    return this.instance.height;
+  constructor(
+    private canvasElement: HTMLElement,
+    width: number,
+    height: number,
+    private drawPointOptions?: DrawPointOption,
+    private drawSegmentOptions?: DrawSegmentOption
+  ) {
+    this.width = width;
+    this.height = height;
+    this.drawPointOptions = drawPointOptions ?? {
+      size: 18,
+      color: { r: 0, g: 0, b: 0 },
+    };
+    this.drawSegmentOptions = drawSegmentOptions ?? {
+      width: 2,
+      color: { r: 0, g: 0, b: 0 },
+    };
   }
 
   clear(): void {
-    throw new Error("Method not implemented.");
+    // not required
   }
 
-  drawPoint(position: Position, options?: DrawPointOption | undefined): void {
-    throw new Error("Method not implemented.");
+  draw(graph: Graph) {
+    const p5Instance = new p5((p: p5) => {
+      p.setup = () => {
+        p.createCanvas(this.width, this.height);
+        p.strokeWeight(5);
+        p.background(0, 100, 0);
+      };
+
+      p.draw = () => {
+        p.background(0, 100, 0);
+        graph.points.forEach((point: Point) => {
+          this.drawPoint(p, point.position);
+        });
+
+        graph.segments.forEach((segment: Segment) => {
+          this.drawSegment(
+            p,
+            segment.points.point1.position,
+            segment.points.point2.position
+          );
+        });
+      };
+    }, this.canvasElement);
+
+    if (p5Instance === null) {
+      throw new Error("Error while creating p5 instance");
+    }
   }
 
-  drawSegment(
-    position1: Position,
-    position2: Position,
-    options?: DrawSegmentOption | undefined
-  ): void {
-    throw new Error("Method not implemented.");
+  redraw(_: Graph): void {
+    // not required
   }
 
-  static create(canvasId: string, width: number, height: number): p5 {
+  drawPoint(p5: p5, position: Position): void {
+    const color = this.drawPointOptions!.color as RgbColor;
+    p5.fill(color.r, color.g, color.b);
+    p5.stroke(this.drawPointOptions?.size!);
+    p5.ellipse(position.x, position.y, 18, 18);
+  }
+
+  drawSegment(p5: p5, position1: Position, position2: Position): void {
+    const color = this.drawSegmentOptions!.color as RgbColor;
+    p5.fill(color.r, color.g, color.b);
+    p5.stroke(color.r, color.g, color.b);
+    p5.strokeWeight(this.drawSegmentOptions?.width!);
+    p5.line(position1.x, position1.y, position2.x, position2.y);
+  }
+
+  static create(canvasId: string, width: number, height: number): P5Canvas {
     const canvasElement = document.getElementById(canvasId);
 
     if (canvasElement === null) {
       throw new Error("Canvas element not found");
     }
 
-    const p5Instance = new p5((p: p5) => {
-      p.setup = () => {
-        p.createCanvas(width, height);
-        p.strokeWeight(5);
-        p.background(0, 100, 0);
-
-        p.translate(p.width / 2, p.height / 2);
-        p.rotate(0);
-        p.fill(0, 1);
-        p.stroke(5);
-        p.ellipse(0, 0, 1, 1);
-      };
-    }, canvasElement);
-
-    if (p5Instance === null) {
-      throw new Error("Error while creating p5 instance");
-    }
-
-    return p5Instance;
+    return new P5Canvas(canvasElement, width, height);
   }
 }

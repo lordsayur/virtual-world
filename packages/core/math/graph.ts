@@ -15,14 +15,11 @@ export class Graph {
   }
 
   draw() {
-    this.canvas.clear();
-    for (const segment of this.segments) {
-      segment.draw(this.canvas);
-    }
+    this.canvas.draw(this);
+  }
 
-    for (const point of this.points) {
-      point.draw(this.canvas);
-    }
+  redraw() {
+    this.canvas.redraw(this);
   }
 
   tryAddPoint(newPoint: Point): boolean {

@@ -12,7 +12,7 @@ export function addRandomPoint(graph: Graph) {
     return;
   }
 
-  graph.draw();
+  graph.redraw();
 }
 
 export function addRandomSegment(graph: Graph) {
@@ -27,7 +27,7 @@ export function addRandomSegment(graph: Graph) {
     return;
   }
 
-  graph.draw();
+  graph.redraw();
 }
 
 export function removeRandomSegment(graph: Graph) {
@@ -39,7 +39,7 @@ export function removeRandomSegment(graph: Graph) {
   const segmentIndex = Math.floor(Math.random() * graph.segments.length);
   graph.removeSegment(graph.segments[segmentIndex]);
 
-  graph.draw();
+  graph.redraw();
 }
 
 export function removeRandomPoint(graph: Graph) {
@@ -51,11 +51,11 @@ export function removeRandomPoint(graph: Graph) {
   const pointIndex = Math.floor(Math.random() * graph.points.length);
   graph.removePoint(graph.points[pointIndex]);
 
-  graph.draw();
+  graph.redraw();
 }
 
 export function clearGraph(graph: Graph) {
   graph.dispose();
 
-  graph.draw();
+  graph.redraw();
 }

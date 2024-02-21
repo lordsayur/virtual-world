@@ -1,13 +1,7 @@
-import { ICanvas } from "..";
 import { Point } from "./point";
 
 export class Segment {
-  constructor(
-    private point1: Point,
-    private point2: Point,
-    private width: number = 2,
-    private color: string = "black"
-  ) {}
+  constructor(private point1: Point, private point2: Point) {}
 
   get points() {
     return {
@@ -26,12 +20,5 @@ export class Segment {
 
   includes(point: Point) {
     return this.point1.equals(point) || this.point2.equals(point);
-  }
-
-  draw(ctx: ICanvas) {
-    ctx.drawSegment(this.point1.position, this.point2.position, {
-      width: this.width,
-      color: this.color,
-    });
   }
 }
