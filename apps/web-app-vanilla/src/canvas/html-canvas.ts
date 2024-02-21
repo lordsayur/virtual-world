@@ -57,11 +57,20 @@ export class HtmlCanvas implements ICanvas {
     this.context.stroke();
   }
 
-  static create(canvasId: string, width: number, height: number): HtmlCanvas {
-    const canvasElement = document.getElementById(
-      canvasId
-    ) as HTMLCanvasElement;
+  static create(
+    canvasId: string,
+    width: number,
+    height: number,
+    backGroundColor: { red: number; green: number; blue: number }
+  ): HtmlCanvas {
+    const canvasContainer = document.getElementById(canvasId) as HTMLDivElement;
 
+    const canvasElement = canvasContainer.appendChild(
+      document.createElement("canvas")
+    );
+
+    const { red, green, blue } = backGroundColor;
+    canvasElement.style.backgroundColor = `rgb(${red},${green},${blue})`;
     canvasElement.width = width;
     canvasElement.height = height;
 

@@ -8,8 +8,25 @@
   </head>
   <body>
     <h1>Virtual World</h1>
-    <canvas id="virtual-world"></canvas>
     <div id="controls">
+      <div>
+        <input
+          type="radio"
+          name="rendering-strategy"
+          id="html-canvas"
+          value="html-canvas"
+          checked
+        />
+        <label for="html-canvas">HTML Canvas</label>
+        <input
+          type="radio"
+          name="rendering-strategy"
+          id="p5-canvas"
+          value="p5-canvas"
+          aria-selected="true"
+        />
+        <label for="p5-canvas">P5 Canvas</label>
+      </div>
       <div>
         <button type="button" id="add-random-point-btn">Add Point</button>
         <button type="button" id="remove-random-point-btn">Remove Point</button>
@@ -24,6 +41,7 @@
         <button type="button" id="clear-graph-btn">Clear All</button>
       </div>
     </div>
+    <div id="virtual-world"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

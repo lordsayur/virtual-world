@@ -1,41 +1,41 @@
-import { Graph, Point, Segment } from "@virtual-world/core";
-import { HtmlCanvas } from "./canvas/html-canvas";
-import {
-  addRandomPoint,
-  addRandomSegment,
-  clearGraph,
-  removeRandomPoint,
-  removeRandomSegment,
-} from "./lib";
+import { createGraphUsingHtmlCanvas } from "./mode/html-canvas";
+import { createGraphUsingP5Canvas } from "./mode/p5-canvas";
 
 import "./style.css";
 
-const canvas = HtmlCanvas.create("virtual-world", 600, 600);
+main();
 
-const graph = new Graph(canvas);
+function main() {
+  addEventListenerToRadioSelection();
+  createGraphUsingHtmlCanvas();
+}
 
-graph
-  .addPoint(new Point(50, 50))
-  .addPoint(new Point(350, 150))
-  .addSegment(new Segment(graph.points[0], graph.points[1]))
-  .draw();
+function addEventListenerToRadioSelection() {
+  const renderingStrategyRadio: NodeListOf<HTMLInputElement> =
+    document.querySelectorAll("input[name=rendering-strategy]");
 
-document
-  .getElementById("add-random-point-btn")
-  ?.addEventListener("click", () => addRandomPoint(graph));
+  renderingStrategyRadio.forEach((radio: HTMLInputElement) => {
+    radio.addEventListener("change", () => selectRenderingStrategy(radio));
+  });
+}
 
-document
-  .getElementById("add-random-segment-btn")
-  ?.addEventListener("click", () => addRandomSegment(graph));
+function selectRenderingStrategy(radio: HTMLInputElement) {
+  removeExistingCanvas();
 
-document
-  .getElementById("remove-random-segment-btn")
-  ?.addEventListener("click", () => removeRandomSegment(graph));
+  if (radio.value == "html-canvas" && radio.checked) {
+    createGraphUsingHtmlCanvas();
+  }
 
-document
-  .getElementById("remove-random-point-btn")
-  ?.addEventListener("click", () => removeRandomPoint(graph));
+  if (radio.value == "p5-canvas" && radio.checked) {
+    createGraphUsingP5Canvas();
+  }
+}
 
-document
-  .getElementById("clear-graph-btn")
-  ?.addEventListener("click", () => clearGraph(graph));
+function removeExistingCanvas() {
+  const canvasContainer = document.getElementById("virtual-world");
+  const currentCanvas = canvasContainer?.firstChild;
+
+  if (currentCanvas) {
+    canvasContainer?.removeChild(currentCanvas);
+  }
+}
