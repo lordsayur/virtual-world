@@ -1,6 +1,8 @@
 import "./style.css";
 
 import { ICanvas, Point, Segment } from "@virtual-world/core";
+import { HtmlCanvas } from "./canvas/html-canvas";
+// import { P5Canvas } from "./canvas/p5-canvas";
 import {
   addRandomPoint,
   addRandomSegment,
@@ -8,23 +10,18 @@ import {
   removeRandomPoint,
   clearGraph,
 } from "./lib";
-import { HtmlCanvas } from "./canvas/html-canvas";
-import { P5Canvas } from "./canvas/p5-canvas";
-
-enum CanvasType {
-  HTML = "html-canvas",
-  P5 = "p5-canvas",
-}
-
-const isPageForP5Canvas = window.location.pathname.includes("p5");
 
 const canvasInstance = initialize();
 registerEventListeners(canvasInstance);
 
 function initialize() {
-  const canvas = createCanvas(
-    isPageForP5Canvas ? CanvasType.P5 : CanvasType.HTML
-  );
+  const canvas = HtmlCanvas.create("virtual-world", 600, 600, {
+    r: 0,
+    g: 100,
+    b: 0,
+  });
+
+  // const canvas = P5Canvas.create("virtual-world", 600, 600);
 
   const point1 = new Point(50, 50);
   const point2 = new Point(350, 150);
@@ -34,23 +31,6 @@ function initialize() {
   canvas.addSegment(new Segment(point1, point2));
 
   return canvas;
-}
-
-function createCanvas(canvasType: CanvasType): ICanvas {
-  switch (canvasType) {
-    case CanvasType.HTML:
-      return HtmlCanvas.create("virtual-world", 600, 600, {
-        r: 0,
-        g: 100,
-        b: 0,
-      });
-
-    case CanvasType.P5:
-      return P5Canvas.create("virtual-world", 600, 600);
-
-    default:
-      throw new Error("Invalid canvas type");
-  }
 }
 
 function registerEventListeners(canvas: ICanvas) {

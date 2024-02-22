@@ -4,18 +4,29 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>Virtual World</title>
   </head>
   <body>
     <h1>Virtual World</h1>
+
     <div id="controls">
-      <a href="./html-canvas.html">
-        <button type="button">HTML Canvas</button>
-      </a>
-      <a href="./p5-canvas.html">
-        <button type="button">P5 Canvas</button>
-      </a>
+      <div>
+        <button type="button" id="add-random-point-btn">Add Point</button>
+        <button type="button" id="remove-random-point-btn">Remove Point</button>
+      </div>
+      <div>
+        <button type="button" id="add-random-segment-btn">Add Segment</button>
+        <button type="button" id="remove-random-segment-btn">
+          Remove Segment
+        </button>
+      </div>
+      <div>
+        <button type="button" id="clear-graph-btn">Clear All</button>
+      </div>
     </div>
+
+    <div id="virtual-world"></div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
