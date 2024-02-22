@@ -1,6 +1,6 @@
 import "./style.css";
 
-import { ICanvas, Point, Segment } from "@virtual-world/core";
+import { ICanvas, Point, RgbColor, Segment } from "@virtual-world/core";
 import { HtmlCanvas } from "./canvas/html-canvas";
 // import { P5Canvas } from "./canvas/p5-canvas";
 import {
@@ -15,13 +15,21 @@ const canvasInstance = initialize();
 registerEventListeners(canvasInstance);
 
 function initialize() {
-  const canvas = HtmlCanvas.create("virtual-world", 600, 600, {
+  const size = 600;
+  const backgroundColor: RgbColor = {
     r: 0,
     g: 100,
     b: 0,
-  });
+  };
 
-  // const canvas = P5Canvas.create("virtual-world", 600, 600);
+  const canvas = HtmlCanvas.create(
+    "virtual-world",
+    size,
+    size,
+    backgroundColor
+  );
+
+  // const canvas = P5Canvas.create("virtual-world", size, size, backgroundColor);
 
   const point1 = new Point(50, 50);
   const point2 = new Point(350, 150);

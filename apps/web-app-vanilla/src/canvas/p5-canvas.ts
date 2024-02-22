@@ -16,6 +16,7 @@ export class P5Canvas implements ICanvas {
     private canvasElement: HTMLElement,
     width: number,
     height: number,
+    private backgroundColor: RgbColor,
     private drawPointOptions?: DrawPointOption,
     private drawSegmentOptions?: DrawSegmentOption
   ) {
@@ -55,15 +56,17 @@ export class P5Canvas implements ICanvas {
   }
 
   draw() {
+    const { r, g, b } = this.backgroundColor
+    
     const p5Instance = new p5((p: p5) => {
       p.setup = () => {
         p.createCanvas(this.width, this.height);
         p.strokeWeight(5);
-        p.background(0, 100, 0);
+        p.background(r, g, b);
       };
 
       p.draw = () => {
-        p.background(0, 100, 0);
+        p.background(r, g, b);
         this.graph.points.forEach((point: Point) => {
           this.drawPoint(p, point.position);
         });
@@ -98,7 +101,12 @@ export class P5Canvas implements ICanvas {
     p5.line(position1.x, position1.y, position2.x, position2.y);
   }
 
-  static create(canvasId: string, width: number, height: number): P5Canvas {
+  static create(
+    canvasId: string,
+    width: number,
+    height: number,
+    backgroundColor: RgbColor
+  ): P5Canvas {
     const graph = new Graph();
     const drawPointOptions: DrawPointOption = {
       size: 18,
@@ -119,6 +127,7 @@ export class P5Canvas implements ICanvas {
       canvasElement,
       width,
       height,
+      backgroundColor,
       drawPointOptions,
       drawSegmentOptions
     );
