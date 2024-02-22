@@ -5,6 +5,7 @@ import {
   ICanvas,
   Point,
   Position,
+  RgbColor,
   Segment,
 } from "@virtual-world/core";
 
@@ -12,19 +13,11 @@ export class HtmlCanvas implements ICanvas {
   private context: CanvasRenderingContext2D;
 
   constructor(
+    private graph: Graph,
     private instance: HTMLCanvasElement,
     private drawPointOptions?: DrawPointOption,
     private drawSegmentOptions?: DrawSegmentOption
   ) {
-    this.drawPointOptions = drawPointOptions ?? {
-      size: 18,
-      color: "black",
-    };
-    this.drawSegmentOptions = drawSegmentOptions ?? {
-      width: 2,
-      color: "black",
-    };
-
     const ctx = this.instance.getContext("2d");
 
     if (ctx === null) {
@@ -34,37 +27,72 @@ export class HtmlCanvas implements ICanvas {
     this.context = ctx;
   }
 
-  get height() {
-    return this.instance.height;
-  }
-
   get width() {
     return this.instance.width;
   }
 
-  clear() {
-    this.context.clearRect(0, 0, this.instance.width, this.instance.height);
+  get height() {
+    return this.instance.height;
   }
 
-  draw(graph: Graph): void {
-    graph.segments.forEach((segment: Segment) => {
+  get points() {
+    return this.graph.points;
+  }
+
+  get segments() {
+    return this.graph.segments;
+  }
+
+  addPoint(point: Point): boolean {
+    const isAdded = this.graph.addPoint(point);
+
+    if (isAdded) this.redraw();
+
+    return isAdded;
+  }
+
+  removePoint(point: Point): void {
+    this.graph.removePoint(point);
+    this.redraw();
+  }
+
+  addSegment(segment: Segment): boolean {
+    const isAdded = this.graph.addSegment(segment);
+
+    if (isAdded) this.redraw();
+
+    return isAdded;
+  }
+
+  removeSegment(segment: Segment): void {
+    this.graph.removeSegment(segment);
+    this.redraw();
+  }
+
+  clear() {
+    this.graph.dispose();
+    this.redraw();
+  }
+
+  draw(): void {
+    this.graph.segments.forEach((segment: Segment) => {
       this.drawSegment(
         segment.points.point1.position,
         segment.points.point2.position
       );
     });
 
-    graph.points.forEach((point: Point) => {
+    this.graph.points.forEach((point: Point) => {
       this.drawPoint(point.position);
     });
   }
 
-  redraw(graph: Graph): void {
-    this.clear();
-    this.draw(graph);
+  private redraw(): void {
+    this.context.clearRect(0, 0, this.instance.width, this.instance.height);
+    this.draw();
   }
 
-  drawPoint(position: Position): void {
+  private drawPoint(position: Position): void {
     const rad = this.drawPointOptions?.size! / 2;
     this.context.beginPath();
     this.context.fillStyle = this.drawPointOptions?.color! as string;
@@ -72,7 +100,7 @@ export class HtmlCanvas implements ICanvas {
     this.context.fill();
   }
 
-  drawSegment(position1: Position, position2: Position): void {
+  private drawSegment(position1: Position, position2: Position): void {
     this.context.beginPath();
     this.context.lineWidth = this.drawSegmentOptions?.width!;
     this.context.strokeStyle = this.drawSegmentOptions?.color! as string;
@@ -85,19 +113,33 @@ export class HtmlCanvas implements ICanvas {
     canvasId: string,
     width: number,
     height: number,
-    backGroundColor: { red: number; green: number; blue: number }
+    backGroundColor: RgbColor
   ): HtmlCanvas {
     const canvasContainer = document.getElementById(canvasId) as HTMLDivElement;
 
+    const graph = new Graph();
+    const drawPointOptions = {
+      size: 18,
+      color: "black",
+    };
+    const drawSegmentOptions = {
+      width: 2,
+      color: "black",
+    };
     const canvasElement = canvasContainer.appendChild(
       document.createElement("canvas")
     );
 
-    const { red, green, blue } = backGroundColor;
-    canvasElement.style.backgroundColor = `rgb(${red},${green},${blue})`;
+    const { r, g, b } = backGroundColor;
+    canvasElement.style.backgroundColor = `rgb(${r},${g},${b})`;
     canvasElement.width = width;
     canvasElement.height = height;
 
-    return new HtmlCanvas(canvasElement)!;
+    return new HtmlCanvas(
+      graph,
+      canvasElement,
+      drawPointOptions,
+      drawSegmentOptions
+    );
   }
 }

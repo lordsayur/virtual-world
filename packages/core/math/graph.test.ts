@@ -4,16 +4,14 @@ import { Point, Segment } from "../primitives";
 import { ICanvas } from "../interfaces";
 
 describe("Graph", () => {
-  let canvas: ICanvas;
-
-  describe("TryAddPoint", () => {
+  describe("addPoint", () => {
     test("Should add point Given no equal point", () => {
       // arrange
-      const graph = new Graph(canvas);
+      const graph = new Graph();
       const newPoint = new Point(1, 1);
 
       // act
-      const result = graph.tryAddPoint(newPoint);
+      const result = graph.addPoint(newPoint);
 
       // assert
       expect(result).toBeTruthy();
@@ -22,11 +20,11 @@ describe("Graph", () => {
 
     test("Should not add point Given has equal point", () => {
       // arrange
-      const graph = new Graph(canvas, [new Point(1, 1)], []);
+      const graph = new Graph([new Point(1, 1)], []);
       const newPoint = new Point(1, 1);
 
       // act
-      const result = graph.tryAddPoint(newPoint);
+      const result = graph.addPoint(newPoint);
 
       // assert
       expect(result).toBeFalsy();
@@ -38,11 +36,11 @@ describe("Graph", () => {
       // arrange
       const point1 = new Point(1, 1);
       const point2 = new Point(1, 2);
-      const graph = new Graph(canvas, [point1, point2], []);
+      const graph = new Graph([point1, point2], []);
       const newSegment = new Segment(point1, point2);
 
       // act
-      const result = graph.tryAddSegment(newSegment);
+      const result = graph.addSegment(newSegment);
 
       // assert
       expect(result).toBeTruthy();
@@ -53,11 +51,11 @@ describe("Graph", () => {
       // arrange
       const point1 = new Point(1, 1);
       const point2 = new Point(1, 2);
-      const graph = new Graph(canvas, [point1, point2], []);
+      const graph = new Graph([point1, point2], []);
       const newSegment = new Segment(point1, point1);
 
       // act
-      const result = graph.tryAddSegment(newSegment);
+      const result = graph.addSegment(newSegment);
 
       // assert
       expect(result).toBeFalsy();
@@ -69,11 +67,11 @@ describe("Graph", () => {
       const point1 = new Point(1, 1);
       const point2 = new Point(1, 2);
       const segment = new Segment(point2, point1);
-      const graph = new Graph(canvas, [point1, point2], [segment]);
+      const graph = new Graph([point1, point2], [segment]);
       const newSegment = new Segment(point1, point2);
 
       // act
-      const result = graph.tryAddSegment(newSegment);
+      const result = graph.addSegment(newSegment);
 
       // assert
       expect(result).toBeFalsy();
@@ -86,7 +84,7 @@ describe("Graph", () => {
       const point1 = new Point(1, 1);
       const point2 = new Point(1, 2);
       const segment = new Segment(point1, point2);
-      const graph = new Graph(canvas, [point1, point2], [segment]);
+      const graph = new Graph([point1, point2], [segment]);
 
       // act
       graph.removeSegment(graph.segments[0]);
@@ -101,7 +99,7 @@ describe("Graph", () => {
       const point1 = new Point(1, 1);
       const point2 = new Point(1, 2);
       const segment = new Segment(point1, point2);
-      const graph = new Graph(canvas, [point1, point2], [segment]);
+      const graph = new Graph([point1, point2], [segment]);
 
       // act
       graph.removePoint(point2);
@@ -117,7 +115,7 @@ describe("Graph", () => {
       const point1 = new Point(1, 1);
       const point2 = new Point(1, 2);
       const segment = new Segment(point1, point2);
-      const graph = new Graph(canvas, [point1, point2], [segment]);
+      const graph = new Graph([point1, point2], [segment]);
 
       // act
       graph.dispose();

@@ -1,4 +1,3 @@
-import { ICanvas } from "..";
 import { Point } from "../primitives/point";
 import { Segment } from "../primitives/segment";
 
@@ -6,54 +5,43 @@ export class Graph {
   points: Point[];
   segments: Segment[];
 
-  canvas: ICanvas;
-
-  constructor(canvas: ICanvas, points: Point[] = [], segments: Segment[] = []) {
+  constructor(points: Point[] = [], segments: Segment[] = []) {
     this.points = points;
     this.segments = segments;
-    this.canvas = canvas;
   }
 
-  draw() {
-    this.canvas.draw(this);
-  }
-
-  redraw() {
-    this.canvas.redraw(this);
-  }
-
-  tryAddPoint(newPoint: Point): boolean {
+  addPoint(newPoint: Point) {
     if (this.containsPoint(newPoint)) {
       return false;
     }
 
-    this.addPoint(newPoint);
+    this.points.push(newPoint);
 
     return true;
   }
 
-  addPoint(newPoint: Point) {
-    this.points.push(newPoint);
-    return this;
+  removePoint(point: Point) {
+    const segments = this.getSegmentsWithPoint(point);
+
+    segments.forEach((segment: Segment) => {
+      this.removeSegment(segment);
+    });
+
+    this.points.splice(this.points.indexOf(point), 1);
   }
 
   containsPoint(point: Point) {
     return this.points.some((p) => p.equals(point));
   }
 
-  tryAddSegment(newSegment: Segment) {
+  addSegment(newSegment: Segment) {
     if (newSegment.isBetweenSamePoints || this.containsSegment(newSegment)) {
       return false;
     }
 
-    this.addSegment(newSegment);
+    this.segments.push(newSegment);
 
     return true;
-  }
-
-  addSegment(newSegment: Segment) {
-    this.segments.push(newSegment);
-    return this;
   }
 
   containsSegment(segment: Segment) {
@@ -66,15 +54,6 @@ export class Graph {
 
   getSegmentsWithPoint(point: Point): Segment[] {
     return this.segments.filter((s) => s.includes(point));
-  }
-
-  removePoint(point: Point) {
-    const segments = this.getSegmentsWithPoint(point);
-    segments.forEach((segment: Segment) => {
-      this.removeSegment(segment);
-    });
-
-    this.points.splice(this.points.indexOf(point), 1);
   }
 
   dispose() {
