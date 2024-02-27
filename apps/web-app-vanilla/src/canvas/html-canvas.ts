@@ -1,23 +1,9 @@
-import {
-  DrawPointOption,
-  DrawSegmentOption,
-  Graph,
-  ICanvas,
-  Point,
-  Position,
-  RgbColor,
-  Segment,
-} from "@virtual-world/core";
+import { Graph, ICanvas, Point, RgbColor, Segment } from "@virtual-world/core";
 
 export class HtmlCanvas implements ICanvas {
   private context: CanvasRenderingContext2D;
 
-  constructor(
-    private graph: Graph,
-    private instance: HTMLCanvasElement,
-    private drawPointOptions?: DrawPointOption,
-    private drawSegmentOptions?: DrawSegmentOption
-  ) {
+  constructor(private graph: Graph, private instance: HTMLCanvasElement) {
     const ctx = this.instance.getContext("2d");
 
     if (ctx === null) {
@@ -76,14 +62,11 @@ export class HtmlCanvas implements ICanvas {
 
   draw(): void {
     this.graph.segments.forEach((segment: Segment) => {
-      this.drawSegment(
-        segment.points.point1.position,
-        segment.points.point2.position
-      );
+      this.drawSegment(segment);
     });
 
     this.graph.points.forEach((point: Point) => {
-      this.drawPoint(point.position);
+      this.drawPoint(point);
     });
   }
 
@@ -92,20 +75,31 @@ export class HtmlCanvas implements ICanvas {
     this.draw();
   }
 
-  private drawPoint(position: Position): void {
-    const rad = this.drawPointOptions?.size! / 2;
+  private drawPoint(point: Point): void {
+    const {
+      color: { r, g, b },
+      size,
+    } = point.style;
+
+    const rad = size / 2;
     this.context.beginPath();
-    this.context.fillStyle = this.drawPointOptions?.color! as string;
-    this.context.arc(position.x, position.y, rad, 0, Math.PI * 2);
+    this.context.fillStyle = `rgb(${r},${g},${b})`;
+    this.context.arc(point.position.x, point.position.y, rad, 0, Math.PI * 2);
     this.context.fill();
   }
 
-  private drawSegment(position1: Position, position2: Position): void {
+  private drawSegment(segment: Segment): void {
+    const { point1: p1, point2: p2 } = segment.points;
+    const {
+      color: { r, g, b },
+      width,
+    } = segment.style;
+
     this.context.beginPath();
-    this.context.lineWidth = this.drawSegmentOptions?.width!;
-    this.context.strokeStyle = this.drawSegmentOptions?.color! as string;
-    this.context.moveTo(position1.x, position1.y);
-    this.context.lineTo(position2.x, position2.y);
+    this.context.lineWidth = width;
+    this.context.strokeStyle = `rgb(${r},${g},${b})`;
+    this.context.moveTo(p1.position.x, p1.position.y);
+    this.context.lineTo(p2.position.x, p2.position.y);
     this.context.stroke();
   }
 
@@ -118,14 +112,6 @@ export class HtmlCanvas implements ICanvas {
     const canvasContainer = document.getElementById(canvasId) as HTMLDivElement;
 
     const graph = new Graph();
-    const drawPointOptions = {
-      size: 18,
-      color: "black",
-    };
-    const drawSegmentOptions = {
-      width: 2,
-      color: "black",
-    };
     const canvasElement = canvasContainer.appendChild(
       document.createElement("canvas")
     );
@@ -135,11 +121,6 @@ export class HtmlCanvas implements ICanvas {
     canvasElement.width = width;
     canvasElement.height = height;
 
-    return new HtmlCanvas(
-      graph,
-      canvasElement,
-      drawPointOptions,
-      drawSegmentOptions
-    );
+    return new HtmlCanvas(graph, canvasElement);
   }
 }

@@ -1,10 +1,7 @@
 import {
-  DrawPointOption,
-  DrawSegmentOption,
   Graph,
   ICanvas,
   Point,
-  Position,
   RgbColor,
   Segment,
 } from "@virtual-world/core";
@@ -16,9 +13,7 @@ export class P5Canvas implements ICanvas {
     private canvasElement: HTMLElement,
     width: number,
     height: number,
-    private backgroundColor: RgbColor,
-    private drawPointOptions?: DrawPointOption,
-    private drawSegmentOptions?: DrawSegmentOption
+    private backgroundColor: RgbColor
   ) {
     this.width = width;
     this.height = height;
@@ -56,8 +51,8 @@ export class P5Canvas implements ICanvas {
   }
 
   draw() {
-    const { r, g, b } = this.backgroundColor
-    
+    const { r, g, b } = this.backgroundColor;
+
     const p5Instance = new p5((p: p5) => {
       p.setup = () => {
         p.createCanvas(this.width, this.height);
@@ -67,16 +62,12 @@ export class P5Canvas implements ICanvas {
 
       p.draw = () => {
         p.background(r, g, b);
-        this.graph.points.forEach((point: Point) => {
-          this.drawPoint(p, point.position);
+        this.graph.segments.forEach((segment: Segment) => {
+          this.drawSegment(p, segment);
         });
 
-        this.graph.segments.forEach((segment: Segment) => {
-          this.drawSegment(
-            p,
-            segment.points.point1.position,
-            segment.points.point2.position
-          );
+        this.graph.points.forEach((point: Point) => {
+          this.drawPoint(p, point);
         });
       };
     }, this.canvasElement);
@@ -86,19 +77,25 @@ export class P5Canvas implements ICanvas {
     }
   }
 
-  private drawPoint(p5: p5, position: Position): void {
-    const color = this.drawPointOptions!.color as RgbColor;
-    p5.fill(color.r, color.g, color.b);
-    p5.stroke(this.drawPointOptions?.size!);
-    p5.ellipse(position.x, position.y, 18, 18);
-  }
-
-  private drawSegment(p5: p5, position1: Position, position2: Position): void {
-    const color = this.drawSegmentOptions!.color as RgbColor;
+  private drawPoint(p5: p5, point: Point): void {
+    const color = point.style.color;
     p5.fill(color.r, color.g, color.b);
     p5.stroke(color.r, color.g, color.b);
-    p5.strokeWeight(this.drawSegmentOptions?.width!);
-    p5.line(position1.x, position1.y, position2.x, position2.y);
+    p5.ellipse(
+      point.position.x,
+      point.position.y,
+      point.style.size,
+      point.style.size
+    );
+  }
+
+  private drawSegment(p5: p5, segment: Segment): void {
+    const { point1: p1, point2: p2 } = segment.points;
+    const color = segment.style.color;
+    p5.fill(color.r, color.g, color.b);
+    p5.stroke(color.r, color.g, color.b);
+    p5.strokeWeight(segment.style.width);
+    p5.line(p1.position.x, p1.position.y, p2.position.x, p2.position.y);
   }
 
   static create(
@@ -108,14 +105,6 @@ export class P5Canvas implements ICanvas {
     backgroundColor: RgbColor
   ): P5Canvas {
     const graph = new Graph();
-    const drawPointOptions: DrawPointOption = {
-      size: 18,
-      color: { r: 0, g: 0, b: 0 },
-    };
-    const drawSegmentOptions: DrawSegmentOption = {
-      width: 2,
-      color: { r: 0, g: 0, b: 0 },
-    };
     const canvasElement = document.getElementById(canvasId);
 
     if (canvasElement === null) {
@@ -127,9 +116,7 @@ export class P5Canvas implements ICanvas {
       canvasElement,
       width,
       height,
-      backgroundColor,
-      drawPointOptions,
-      drawSegmentOptions
+      backgroundColor
     );
 
     canvas.draw();

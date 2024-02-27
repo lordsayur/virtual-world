@@ -2,7 +2,14 @@ import { ICanvas, Point, Segment } from "@virtual-world/core";
 
 export function addRandomPoint(canvas: ICanvas) {
   canvas.addPoint(
-    new Point(Math.random() * canvas.width, Math.random() * canvas.height)
+    new Point(Math.random() * canvas.width, Math.random() * canvas.height, {
+      size: 18,
+      color: {
+        r: Math.random() * 255,
+        g: Math.random() * 255,
+        b: Math.random() * 255,
+      },
+    })
   );
 }
 
@@ -11,7 +18,14 @@ export function addRandomSegment(canvas: ICanvas) {
   const point2Index = Math.floor(Math.random() * canvas.points.length);
 
   canvas.addSegment(
-    new Segment(canvas.points[point1Index], canvas.points[point2Index])
+    new Segment(canvas.points[point1Index], canvas.points[point2Index], {
+      width: 2,
+      color: {
+        r: Math.random() * 255,
+        g: Math.random() * 255,
+        b: Math.random() * 255,
+      },
+    })
   );
 }
 

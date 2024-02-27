@@ -9,12 +9,12 @@ export type RgbColor = {
   b: number;
 };
 
-export type DrawPointOption = {
-  size?: number;
-  color?: RgbColor | string;
+export type PointStyleOption = {
+  size: number;
+  color: RgbColor;
 };
 
-export type DrawSegmentOption = {
-  width?: number;
-  color?: RgbColor | string;
+export type SegmentStyleOption = {
+  width: number;
+  color: RgbColor;
 };
